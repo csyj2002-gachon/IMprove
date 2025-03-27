@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login Dashboard with Firebase</title>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; }
+    .hidden { display: none; }
+    .container { margin: 50px auto; max-width: 600px; }
+    .button { padding: 10px 20px; margin: 10px; cursor: pointer; background-color: #007BFF; color: white; border: none; }
+    .tab { display: inline-block; padding: 10px 20px; background: #28a745; color: white; cursor: pointer; margin: 5px; }
+    .tab-content { display: none; margin-top: 20px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid black; padding: 8px; text-align: left; }
+    th { background: #f2f2f2; }
+    .dataset-container { display: flex; justify-content: center; gap: 20px; }
+    .dataset-box { text-align: center; }
+  </style>
+</head>
+<body>
+  <div id="loginPage" class="container">
+    <h2>Login</h2>
+    <input type="email" id="email" placeholder="Email" /><br /><br />
+    <input type="password" id="password" placeholder="Password" /><br /><br />
+    <button class="button" onclick="login()">Login</button>
+    <button class="button" onclick="signup()">Sign Up</button>
+  </div>
+
+  <div id="datasetSelection" class="container hidden">
+    <img src="improve_banner.png" alt="Improve" width="300" /><br /><br />
+    <h2>Select a Dataset</h2>
+    <div class="dataset-container">
+      <div class="dataset-box">
+        <button class="button" onclick="selectDataset('NHIS-NSC')">NHIS-NSC</button>
+        <p>Description of NHIS-NSC dataset.</p>
+      </div>
+      <div class="dataset-box">
+        <button class="button" onclick="selectDataset('AYA')">AYA</button>
+        <p>Description of AYA dataset.</p>
+      </div>
+      <div class="dataset-box">
+        <button class="button" onclick="selectDataset('NHIS-Customized Data')">NHIS-Customized Data</button>
+        <p>Description of NHIS-Customized Data dataset.</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="dashboard" class="container hidden">
+    <h2 id="datasetTitle"></h2>
+    <div>
+      <span class="tab" onclick="showTab('feature-statistics')">Feature Statistics</span>
+      <span class="tab" onclick="showTab('visualize')">Visualize</span>
+      <span class="tab" onclick="showTab('model')">Model</span>
+    </div>
+    <div id="feature-statistics" class="tab-content">
+      <h3>Feature Statistics</h3>
+      <div id="data-table"></div>
+    </div>
+    <div id="visualize" class="tab-content">
+      <h3>Visualization</h3>
+      <img id="visualization-img" src="" alt="Visualization" width="400" />
+    </div>
+    <div id="model" class="tab-content">
+      <h3>Model Output</h3>
+      <p>Model output will be displayed here in the future.</p>
+    </div>
+  </div>
+
+  <script>
+    const firebaseConfig = {
+  apiKey: "AIzaSyDoe5uioPoBaVC0H4-Q-VLi-x2IIAre_Bg",
+  authDomain: "improve-gc.firebaseapp.com",
+  projectId: "improve-gc",
+  storageBucket: "improve-gc.firebasestorage.app",
+  messagingSenderId: "761945118859",
+  appId: "1:761945118859:web:64e10da03bed8d447ddc8e",
+  measurementId: "G-H7V9K6HR4X"
+};
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    function login() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      auth.signInWithEmailAndPassword(email, password)
+        .then(() => {
+          document.getElementById("loginPage").classList.add("hidden");
+          document.getElementById("datasetSelection").classList.remove("hidden");
+        })
+        .catch((error) => alert("Login failed: " + error.message));
+    }
+
+    function signup() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      auth.createUserWithEmailAndPassword(email, password)
+        .then(() => alert("Signup successful! Please log in."))
+        .catch((error) => alert("Signup failed: " + error.message));
+    }
+
+    function selectDataset(name) {
+      history.pushState({ page: name }, '', `#${name}`);
+      document.getElementById('datasetSelection').classList.add('hidden');
+      document.getElementById('dashboard').classList.remove('hidden');
+      document.getElementById('datasetTitle').innerText = name;
+      loadTables(name);
+      loadVisualization(name);
+    }
+
+    function showTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(tab => tab.style.display = 'none');
+      document.getElementById(tabId).style.display = 'block';
+    }
+
+    function loadVisualization(dataset) {
+      let imageFiles = {
+        'NHIS-NSC': 'nsc_f1.png',
+        'AYA': 'aya_f1.png',
+        'NHIS-Customized Data': 'custom_f1.png'
+      };
+      document.getElementById('visualization-img').src = imageFiles[dataset] || '';
+    }
+
+    function loadTables(dataset) {
+      let tableFiles = {
+        'NHIS-NSC': ['nsc_t1.csv', 'nsc_t2.csv'],
+        'AYA': ['aya_t1.csv', 'aya_t2.csv'],
+        'NHIS-Customized Data': ['custom_t1.csv']
+      };
+      document.getElementById('data-table').innerHTML = '';
+
+      if (tableFiles[dataset]) {
+        Promise.all(tableFiles[dataset].map(file => fetch(file).then(response => response.text())))
+        .then(filesData => {
+          let combinedTable = '';
+          filesData.forEach(data => {
+            Papa.parse(data, {
+              complete: function(results) {
+                const rows = results.data;
+                let table = '<table><tr>' + rows[0].map(col => `<th>${col}</th>`).join('') + '</tr>';
+                rows.slice(1).forEach(row => {
+                  table += '<tr>' + row.map(cell => `<td>${cell}</td>`).join('') + '</tr>';
+                });
+                table += '</table>';
+                combinedTable += table;
+                document.getElementById('data-table').innerHTML = combinedTable;
+              },
+              skipEmptyLines: true
+            });
+          });
+        })
+        .catch(error => console.error('Error loading table:', error));
+      }
+    }
+
+    window.onpopstate = function(event) {
+      if (event.state && event.state.page) {
+        document.getElementById('datasetSelection').classList.add('hidden');
+        document.getElementById('dashboard').classList.remove('hidden');
+        document.getElementById('datasetTitle').innerText = event.state.page;
+        loadTables(event.state.page);
+        loadVisualization(event.state.page);
+      } else {
+        document.getElementById('dashboard').classList.add('hidden');
+        document.getElementById('datasetSelection').classList.remove('hidden');
+      }
+    };
+  </script>
+</body>
+</html>

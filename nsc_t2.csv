@@ -1,0 +1,30 @@
+﻿,,,N,%
+Control,,,"14,739",100
+Demographic,Age,,,
+,,15~19,258,1.8
+,,20~24,981,6.7
+,,25~29,"2,223",15.1
+,,30~34,"4,311",29.2
+,,35~39,"6,966",47.3
+,Sex,,,
+,,Male,"5,499",37.3
+,,Female,"9,240",62.7
+,BMI,,,
+,,lossweight,958,6.5
+,,normal,"8,436",57.2
+,,overweight,"5,341",36.2
+,,NA,4,0.0
+Economic-related,Insurance,,,
+,(Economic activity),Employees(Economic),10022,68.0
+,,Family members(Non-economic),4567,31.0
+,,Medicade,150,1.0
+,Income,,,
+,,Low,"3,082",20.9
+,,Middle,"6,557",44.5
+,,High,"5,100",34.6
+Survival,,,,
+,Death,,,
+,,No,14699,99.7
+,,YES,40,0.3
+,"Follow-up Duration(Survive Patients, Mean(range))",,7.554(1-12),
+,,,,

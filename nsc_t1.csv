@@ -1,0 +1,56 @@
+﻿,,,N,%
+Population,,,,
+,Cancer ,,"4,913",100
+,,"Lip, oral cavity and pharynx(C00-C14)",189,3.8
+,,Oesophagus(C15),9,0.2
+,,Stomach(C16),273,5.6
+,,Colon and rectum(C18-C20),287,5.8
+,,Liver(C22),589,12.0
+,,Gallbladder etc. (C23-C24),29,0.6
+,,Pancreas(C25),81,1.6
+,,Larynx(C32),27,0.5
+,,Lung(C33-C34),203,4.1
+,,Breast(C50),372,7.6
+,,Cervix uteri(C53),168,3.4
+,,Corpus uteri(C54),41,0.8
+,,Ovary(C56),409,8.3
+,,Prostate(C61),68,1.4
+,,Testis(C62),36,0.7
+,,Kidney(C64),69,1.4
+,,Bladder(C67),46,0.9
+,,Brain and CNS(C70-C72),126,2.6
+,,Thyroid(C73),"1,172",23.9
+,,Hodgkin lymphoma(C81),13,0.3
+,,"Non-Hodgkin lymphoma(C82-C86, C96)",104,2.1
+,,Multiple myeloma(C90),4,0.1
+,,Leukaemia(C91-C95),56,1.1
+,,Other and unspecified(C00-C96),542,11.0
+Demographic,Age,,,
+,,15~19,86,1.8
+,,20~24,327,6.7
+,,25~29,741,15.1
+,,30~34,"1,437",29.2
+,,35~39,"2,322",47.3
+,Sex,,,
+,,Male,"1,833",37.3
+,,Female,"3,080",62.7
+,BMI,,,
+,,lossweight,316,6.4
+,,normal,"2,906",59.1
+,,overweight,"1,688",34.4
+,,NA,3,0.1
+Economic-related,Insurance,,,
+,(Economic activity),Employees(Economic),3459,70.4
+,,Family members(Non-economic),1420,28.9
+,,Medicade,34,0.7
+,Income,,,
+,,Low,816,16.6
+,,Middle,"2,059",41.9
+,,High,"2,038",41.5
+Survival,,,,
+,Death,,,
+,,No,4771,97.1
+,,YES,142,2.9
+,"Survival Period (Death Patients, Mean(range))",,3.535(1-12),
+,"Follow-up Duration(Survive Patients, Mean(range))",,7.507(1-12),
+,,,,
